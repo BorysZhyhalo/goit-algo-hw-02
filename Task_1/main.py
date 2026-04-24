@@ -1,5 +1,4 @@
 from queue import Queue
-import time
 
 # Створити чергу заявок
 request_queue = Queue()
@@ -25,31 +24,46 @@ def process_request():
     if not request_queue.empty():
         request = request_queue.get()
         request["status"] = "processed"
+
         print(f"Заявка #{request['id']} оброблена.")
     else:
-        print("Черга порожня.")
+        print("Черга порожня. Немає заявок для обробки.")
+
+
+def show_queue_size():
+    """Показати кількість заявок у черзі."""
+    print(f"Кількість заявок у черзі: {request_queue.qsize()}")
 
 
 def main():
-    """
-    Головний цикл програми:
-    автоматично створює та обробляє заявки,
-    поки користувач не завершить програму.
-    """
-    print("Програма запущена. Введіть 'exit' для завершення.")
+    print("Програма обробки заявок запущена.")
+    print("Доступні команди:")
+    print("create  - створити нову заявку")
+    print("process - обробити першу заявку з черги")
+    print("status  - показати кількість заявок у черзі")
+    print("exit    - завершити програму")
+    print("-" * 40)
 
     while True:
-        command = input("Натисніть Enter для наступного кроку або 'exit': ").strip().lower()
+        command = input("Введіть команду: ").strip().lower()
 
-        if command == "exit":
+        if command == "create":
+            generate_request()
+
+        elif command == "process":
+            process_request()
+
+        elif command == "status":
+            show_queue_size()
+
+        elif command == "exit":
             print("Програму завершено.")
             break
 
-        generate_request()   # Автоматичне створення заявки
-        process_request()    # Послідовна обробка заявки
-        print("-" * 40)
+        else:
+            print("Невідома команда. Використайте: create, process, status або exit.")
 
-        time.sleep(1)  # Імітація часу між кроками
+        print("-" * 40)
 
 
 if __name__ == "__main__":
